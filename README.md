@@ -1,12 +1,16 @@
 # Projeto Kafka com Python de Mensageria
 
+
+
 Este projeto utiliza Kafka para comunicação assíncrona entre microserviços, implementado em Python. A arquitetura é orientada a eventos, utilizando Kafka como o sistema de mensageria para garantir a escalabilidade e a eficiência dos serviços.
+
+Todas as classes deste programa têm como finalidade ilustrar funções e métodos que simulam processos e interagem com o Kafka. É importante notar que essas classes estão apenas realizando simulações dessas operações.
 
 ## Visão Geral do Projeto
 
 Este projeto foi desenvolvido para gerenciar o fluxo de informações entre diferentes serviços em um sistema de vendas. Utiliza quatro tópicos no Kafka para orquestrar as operações de pedidos, pagamento, verificação de fraude e processo de picking.
 
-### Tópicos do Kafka
+## Tópicos do Kafka
 
 1. **Pedido Novo**
    - **Descrição**: Todo pedido que chegar via sistema de venda é publicado neste tópico. Outros serviços podem consumir este tópico para processar novos pedidos.
@@ -24,7 +28,7 @@ Este projeto foi desenvolvido para gerenciar o fluxo de informações entre dife
    - **Descrição**: Contém o status do processo de separação dos pedidos.
    - **Utilização**: Monitoramento do processo de separação de pedidos, otimização logística.
   
-   - ## Microsserviços
+## Microsserviços
 
 ### Reserva do Produto
 - **Descrição**: Este microserviço consome o tópico "Pedido Novo" e, assim que chega um novo pedido, reserva o produto no estoque.
