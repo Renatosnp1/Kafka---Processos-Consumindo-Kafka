@@ -97,3 +97,7 @@ Arquivo principal que inicializa e executa os produtores e consumidores, exempli
 ## Conclusão
 
 Esta estrutura modular e orientada a eventos permite que cada componente do sistema tenha uma responsabilidade bem definida, promovendo a escalabilidade e a facilidade de manutenção. A utilização de Kafka como sistema de mensageria garante que os serviços possam se comunicar de maneira eficiente e desacoplada, suportando um alto volume de transações e mantendo a integridade dos dados através de tópicos bem definidos. Cada microsserviço desempenha um papel crucial na orquestração do fluxo de pedidos, desde a recepção até a entrega final, garantindo uma operação suave e eficiente.
+
+
+
+<img src="Images/Kafka sistema pedido.png">
