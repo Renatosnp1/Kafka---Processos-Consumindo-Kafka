@@ -7,10 +7,6 @@ import threading
 
 
 
-
-
-
-
 def verificando_fraude():
     for msg in Consumer().analise_de_fraude():
         n_pedido = msg['N_PEDIDO']
@@ -28,11 +24,6 @@ def reserva_produto():
 
         elif msg['TIPO'] == 'PROCESSO_PAGAMENTO':
             pass
-
-
-
-
-
 
 
 
