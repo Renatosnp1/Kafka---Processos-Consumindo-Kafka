@@ -4,6 +4,10 @@ import json
 
 class Consumer:
 
+    def __init__(self) -> None:
+        self.ProdutosReservado = []
+
+
     def __json_deserializer(self, data):
         return json.loads(data.decode('utf-8'))
 
@@ -19,12 +23,14 @@ class Consumer:
             value_deserializer = self.__json_deserializer)
         
         for message in consumer:
+            if message.value['N_PEDIDO'] not in self.ProdutosReservado:
+                self.ProdutosReservado.append(message.value['N_PEDIDO'])
             yield message.value
 
 
 
 
-    def reservando_produto_estoque(self):
+    def reservandoProdutoEstoque(self):
         consumer = KafkaConsumer(
            'NOVO_PEDIDO', 
            'PROCESSO_PAGAMENTO',
@@ -41,7 +47,7 @@ class Consumer:
             
 
 
-    def envio_notificacao_cliente(self):
+    def envioNotificacaoCliente(self):
         consumer = KafkaConsumer(
            'NOVO_PEDIDO', 
            'PROCESSO_PAGAMENTO',
@@ -105,26 +111,6 @@ class Consumer:
 
 
 
-
-
-
-
-
-
-
-# def json_deserializer(data):
-#     return json.loads(data.decode('utf-8'))
-
-# # Crie um consumidor Kafka
-# consumer = KafkaConsumer(
-#     'NOVO_PEDIDO',
-#     bootstrap_servers=['localhost:9092'],
-#     auto_offset_reset='earliest',
-#     enable_auto_commit=True,
-#     group_id='meu_grupo',
-#     value_deserializer=json_deserializer
-# )
-
-# # Consuma as mensagens do tópico
-# for message in consumer:
-#     print(f'Mensagem recebida: {message.value}')
+if __name__ == "__main__":
+    for i in Consumer().envioNotificacaoCliente():
+        print(i)

@@ -1,43 +1,79 @@
 from producers.producer import Producer
 from consumers.consumer import Consumer
+from controller.venda import SimulaPedidoVenda
 from time import sleep
 import random
-
 import threading
 
 
 
-def verificando_fraude():
-    for msg in Consumer().analise_de_fraude():
-        n_pedido = msg['N_PEDIDO']
-        print(f"Analisando Fraude - Pedido: {n_pedido}")
-        msg['TIPO'] = random.choice(['NAO_FRAUDE', 'FRAUDE'])
-        Producer().send_kafka(msg, 'FRAUDE_VERIFICADO')
+def novoPedido():
+    for i in range(4):
+        s = SimulaPedidoVenda().simulaPedido()
+        Producer().sendKafka(s, 'NOVO_PEDIDO')
 
 
 
-def reserva_produto():
-    for msg in Consumer().reservando_produto_estoque():     
+
+def reservaProduto():
+    for msg in Consumer().reservandoProdutoEstoque():     
         if msg['TIPO'] == 'NOVO_PEDIDO':
-            n_pedido = msg['N_PEDIDO']
-            print(f"Pedido: {n_pedido} com produtos reservados!!!")
+            print(f"Pedido reservado: {str(msg)}")
+
+
+
+def envioNotificacao():
+    for msg in Consumer().envioNotificacaoCliente():
+
+        if msg['TIPO'] == 'NOVO_PEDIDO':
+            print(f"Notificacao compra: {str(msg)}")
 
         elif msg['TIPO'] == 'PROCESSO_PAGAMENTO':
+            print(f"Notificacao pagamento: {str(msg)}")
+
+        elif msg['TIPO'] == 'SEPARACAO_PRODUTO':
+            print(f"Notificacao separacao: {str(msg)}")
+
+        elif msg['TIPO'] == 'FRAUDE_VERIFICADO':
+            print(f"Notificacao de fraude: {str(msg)}")
+
+        else:
             pass
+
+
+
+def verificandoFraude():
+    for msg in Consumer().analise_de_fraude():
+        msg['TIPO'] = 'FRAUDE_VERIFICADO'
+        msg['EXISTE_FRAUDE'] = random.choice(['SIM', 'NAO'])
+        Producer().sendKafka(msg, 'FRAUDE_VERIFICADO')
+
+
+
+
 
 
 
 
 # Criar threads
-thread1 = threading.Thread(target=reserva_produto)
-thread2 = threading.Thread(target=verificando_fraude)
+thread1 = threading.Thread(target=novoPedido)
+thread2 = threading.Thread(target=reservaProduto)
+thread3 = threading.Thread(target=envioNotificacao)
+thread4 = threading.Thread(target=verificandoFraude)
 
 # Iniciar threads
 thread1.start()
+thread1.join()
+
+
 thread2.start()
+thread3.start()
+thread4.start()
 
 # Esperar até que ambas as threads terminem
-thread1.join()
+
 thread2.join()
+thread3.join()
+thread4.join()
 
 print("Execução das threads concluída")
